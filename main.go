@@ -73,6 +73,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		}
 		// Store the weather data
 		client.RedisClient.Set(ctx, coordinatesKey, tempC, 0)
+		// Set the weather data and submit it
 		tempF := (tempC)*(9.0/5.0) + 32
 		data.TempC = tempC
 		data.TempF = tempF

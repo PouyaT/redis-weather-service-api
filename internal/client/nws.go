@@ -34,8 +34,8 @@ type observationStationsResponse struct {
 
 // Hits the points endpoint: https://www.weather.gov/documentation/services-web-api#/default/point
 // returns the observationStations Url
-func getPoints(lattitude string, longitude string) (string, error) {
-	getPointsEndpoint := fmt.Sprintf("%s/points/%s,%s", BASE_URL, lattitude, longitude)
+func getPoints(lattitude float64, longitude float64) (string, error) {
+	getPointsEndpoint := fmt.Sprintf("%s/points/%v,%v", BASE_URL, lattitude, longitude)
 	resp, err := http.Get(getPointsEndpoint)
 	if err != nil {
 		return "", err
@@ -56,7 +56,7 @@ func getPoints(lattitude string, longitude string) (string, error) {
 
 // Hits the observationStations Url from getPoints() which is the gridpoints stations endpoint: https://www.weather.gov/documentation/services-web-api#/default/gridpoint_stations
 // returns a list of station endpoints and returns the first one:
-func getStations(lattitude string, longitude string) (string, error) {
+func getStations(lattitude float64, longitude float64) (string, error) {
 	observationStationsUrl, err := getPoints(lattitude, longitude)
 	if err != nil {
 		return "", err
@@ -81,7 +81,7 @@ func getStations(lattitude string, longitude string) (string, error) {
 
 // Using the station url returned from getStations() it hits the stations/obs/latest endpoint: https://www.weather.gov/documentation/services-web-api#/default/station_observation_latest
 // returns a the temperature from the station in C
-func GetTemperature(lattitude string, longitude string) (float64, error) {
+func GetTemperature(lattitude float64, longitude float64) (float64, error) {
 	stationUrl, err := getStations(lattitude, longitude)
 	if err != nil {
 		return 0, nil

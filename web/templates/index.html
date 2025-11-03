@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Lookup</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+        }
+
+        label,
+        input {
+            display: block;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Weather Lookup</h1>
+    <form method="POST">
+        <label>Latitude: <input type="text" name="lat" required></label>
+        <label>Longitude: <input type="text" name="lon" required></label>
+        <button type="submit">Submit</button>
+    </form>
+
+    {{if .Error}}
+    <p style="color: red;">{{.Error}}</p>
+    {{end}}
+
+    {{if .TempC}}
+    <h2>Temperature:</h2>
+    <p>{{printf "%.1f" .TempC}} °C ({{printf "%.1f" .TempF}} °F)</p>
+    {{end}}
+</body>
+
+</html>

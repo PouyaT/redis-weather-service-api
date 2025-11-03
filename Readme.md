@@ -15,5 +15,5 @@ A simple Go web application that fetches the current temperature for a given lat
 3. Open `http://localhost:8080` in a web browser
 4. Enter in a lattitude and longitude
 
-## Example Results
+## Results
 ![Example](images/example.png)

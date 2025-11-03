@@ -35,16 +35,20 @@ type observationStationsResponse struct {
 // Hits the points endpoint: https://www.weather.gov/documentation/services-web-api#/default/point
 // returns the observationStations Url
 func getPoints(lattitude float64, longitude float64) (string, error) {
+	// Create the url for the nws Getpoints endpoint
 	getPointsEndpoint := fmt.Sprintf("%s/points/%v,%v", BASE_URL, lattitude, longitude)
+	// Get the response
 	resp, err := http.Get(getPointsEndpoint)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
+	// Read the response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
+	// put the response body in a variable
 	var getPointsResponse pointsResponse
 	err = json.Unmarshal(body, &getPointsResponse)
 	if err != nil {
@@ -57,19 +61,23 @@ func getPoints(lattitude float64, longitude float64) (string, error) {
 // Hits the observationStations Url from getPoints() which is the gridpoints stations endpoint: https://www.weather.gov/documentation/services-web-api#/default/gridpoint_stations
 // returns a list of station endpoints and returns the first one:
 func getStations(lattitude float64, longitude float64) (string, error) {
+	// Get the observation urls
 	observationStationsUrl, err := getPoints(lattitude, longitude)
 	if err != nil {
 		return "", err
 	}
+	// Get the response
 	resp, err := http.Get(observationStationsUrl)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
+	// Read the response
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
+	// Put the response into a variable
 	var observationStations observationStationsResponse
 	err = json.Unmarshal(body, &observationStations)
 	if err != nil {
@@ -82,21 +90,24 @@ func getStations(lattitude float64, longitude float64) (string, error) {
 // Using the station url returned from getStations() it hits the stations/obs/latest endpoint: https://www.weather.gov/documentation/services-web-api#/default/station_observation_latest
 // returns a the temperature from the station in C
 func GetTemperature(lattitude float64, longitude float64) (float64, error) {
+	// Get all the station urls
 	stationUrl, err := getStations(lattitude, longitude)
 	if err != nil {
 		return 0, nil
 	}
+	// Create the endpoint that will have the most recetn observation data
 	latestObsStationUrl := fmt.Sprintf("%s/observations/latest", stationUrl)
 	resp, err := http.Get(latestObsStationUrl)
 	if err != nil {
 		return 0, err
 	}
 	defer resp.Body.Close()
+	// Read the response
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return 0, err
 	}
-
+	// Put the response in a variable
 	var latestStation latestStationsResponse
 	err = json.Unmarshal(body, &latestStation)
 	if err != nil {

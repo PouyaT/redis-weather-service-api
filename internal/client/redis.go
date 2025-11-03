@@ -7,6 +7,8 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+// Create a global redis client for easier usage
+
 var RedisClient *redis.Client
 
 func InitRedis(address string, password string) error {
